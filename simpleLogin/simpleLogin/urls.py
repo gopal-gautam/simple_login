@@ -16,6 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from loginValidator import views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^login/', views.get_login),
+    url(r'^validate/', views.get_login),
+    url(r'^$', views.get_login),
 ]
+
+urlpatterns += staticfiles_urlpatterns()

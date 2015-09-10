@@ -1,0 +1,72 @@
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'jquery-validation/lib/jquery.mockjax.js' %}"></script>
+    <script src="{% static 'jquery-validation/dist/jquery.validate.js' %}"></script>
+    <script>
+      $(document).ready(function () {
+        $('#form-cred').validate({
+          rules: {
+            firstName: {
+              required: true,
+              maxlength: 30
+            },
+            lastName: {
+              required: true,
+              maxlength: 30
+            },
+            phone: {
+              required: true,
+              number: true
+            },
+            address: {
+              required: true
+            }
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+          <div class="col-sm-6 col-md-4 col-md-offset-4">
+              <h1 class="text-center">Please fill up</h1>
+                <div class="account-wall">
+                  <p style="color:red" class="text-center">{{message}}</p>
+                  {{ formset.non_form_errors.as_ul }}
+                  <form id="form-cred" action='/validate/' method="post" style="max-width: 330px; padding: 15px; margin: 0 auto;">
+                    {% csrf_token %}
+                    <!-- <table> -->
+                      {% for k,v in form.errors.items %}
+                      {% if k == "__all__" %}
+                      <div class="error" style="color:red;">{{ v }}</div>
+                      {% endif %}
+                      {% endfor %}
+                      <!-- {% for field in form %}
+                        <tr><th>{{ field.label }}</th><td>{{ field }}</td></tr>
+                      {% endfor %} -->
+                      {% for field in form %}
+                        <div class="form-group">
+                          <lable for="{{ field.auto_id }}">{{ field.label }}:</lable><div>{{ field }}</div><div class="error" style="color:red;">{{ field.errors }}</div>
+                        </div>
+                      {% endfor %}
+                      <div class="form-group"><input id="submitButton" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" /></div>
+                    <!-- </table> -->
+                  </form>
+                </div>
+            </div>
+          </div>
+        </div>
+  </body>
+</html>
+
